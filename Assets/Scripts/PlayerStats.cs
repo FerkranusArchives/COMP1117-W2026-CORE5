@@ -2,15 +2,28 @@ using UnityEngine;
 
 public class PlayerStats
 {
-    private int moveSpeed;
-    public int MoveSpeed
+    // Private fields
+    private float moveSpeed;
+    private int maxHealth;
+    private int currentHealth;
+
+    // Public properties
+    public float MoveSpeed
     {
         get
         {
-            // 
-                // Modify what I can return in any way I want
-            //
             return moveSpeed;
+        }
+        set
+        {
+            if (value > 20)
+            {
+                moveSpeed = 20;
+            }
+            else
+            {
+                moveSpeed = value;
+            }
         }
     }
 }
