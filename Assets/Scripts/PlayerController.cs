@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float initialSpeed = 5;
     [SerializeField] private int initialHealth = 100;
+    [SerializeField] private Animator playerController; 
 
     public Slider healthBar;
     private PlayerStats stats;
@@ -54,6 +56,8 @@ public class PlayerController : MonoBehaviour
         float velocityX = moveInput.x * stats.MoveSpeed;
 
         rBody.linearVelocity = new Vector2(velocityX, rBody.linearVelocity.y);
+
+        playerController.SetFloat("xVelocity", velocityX);
         
     }
 

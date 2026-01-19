@@ -768,6 +768,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d333e7f03abc2e64dbdf073e169aa2b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &997331958 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6879752756298236294, guid: 7f42f5c054cc0fa4dadfa2c6b8601e51, type: 3}
+  m_PrefabInstance: {fileID: 1863270855174590643}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &997331961 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7866048626726982674, guid: 7f42f5c054cc0fa4dadfa2c6b8601e51, type: 3}
@@ -7834,6 +7839,10 @@ PrefabInstance:
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 1232656707}
+    - target: {fileID: 6191479735695275329, guid: 7f42f5c054cc0fa4dadfa2c6b8601e51, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 997331958}
     - target: {fileID: 6879752756298236294, guid: 7f42f5c054cc0fa4dadfa2c6b8601e51, type: 3}
       propertyPath: m_Controller
       value: 
