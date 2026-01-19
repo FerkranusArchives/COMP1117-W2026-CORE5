@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
@@ -6,6 +7,9 @@ public class PlayerStats : MonoBehaviour
     private float moveSpeed;
     private int maxHealth;
     private int currentHealth;
+    private bool isDead;
+
+    
 
    // These are public properties
    public float MoveSpeed
@@ -55,7 +59,26 @@ public int MaxHealth
         }
     }
 
-public PlayerStats()
+    public bool IsDead
+    {
+        get { return isDead; }
+
+        set
+        {
+            if (currentHealth <= 0)
+            {
+                isDead = true;
+                if (isDead)
+                {
+                    Debug.Log("Player has perished.");
+                }
+            }
+            else { isDead = false; }
+        }
+    }
+
+
+    public PlayerStats()
 {
     moveSpeed = 10;
     maxHealth = 100;
@@ -70,5 +93,5 @@ public PlayerStats(float moveSpeed, int maxHealth)
 
  Debug.Log($"Player initialized with MoveSpeed = {moveSpeed}, MaxHealth = {maxHealth}, CurrentHealth = {currentHealth}");
 }
-
 }
+

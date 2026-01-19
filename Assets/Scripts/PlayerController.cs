@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damageAmount)
     {
         stats.CurrentHealth -= damageAmount;
-        Debug.Log("Player took damage");
+        Debug.Log($"Player took damage. Health left: {stats.CurrentHealth}");
     }
 
     }
