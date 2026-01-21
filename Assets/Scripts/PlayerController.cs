@@ -1,49 +1,66 @@
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+[RequireComponent(typeof(PlayerInputHandler),typeof(Rigidbody2D))]
+public class PlayerController : Character
 {
-    [SerializeField] private float initialSpeed = 5;
-    [SerializeField] private int initialHealth = 100;
+   
     [SerializeField] private Animator playerController; 
 
-    public Slider healthBar;
-    private PlayerStats stats;
-    private Vector2 moveInput;
+    [SerializeField] public Slider healthBar;
+
+    [Header("Movement Settings")]
+    [SerializeField] private float jumpForce = 12f;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckRadius = 0.2f;
 
     // Components
-    private Rigidbody2D rBody;
+    
+    
+    private Rigidbody2D rBody; // Used to apply force
+    private PlayerInputHandler input; // Readsinput
+    private bool isGrounded; // Holds result of ground check operation
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         // Initialize
-        rBody = GetComponent<Rigidbody2D>();
         
-
-        stats = new PlayerStats(initialSpeed, initialHealth);
-        stats = new PlayerStats();
-        stats.MoveSpeed = initialSpeed;
-        stats.MaxHealth = initialHealth;
-        stats.CurrentHealth = initialHealth;
+        rBody = GetComponent<Rigidbody2D>();
+        input = GetComponent<PlayerInputHandler>();
+       // stats = new PlayerStats(initialSpeed, initialHealth);
     }
 
-    void OnMove(InputValue value)
+    private void Update()
     {
-        moveInput = value.Get<Vector2>();
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        // Debug.Log(isGrounded); // Removed due to flooding
     }
-
     void FixedUpdate()
     {
-        ApplyMovement();
         HealthBarControl();
+        if (IsDead)
+        {
+            return;
+        }
+        HandleMovement();
+        HandleJump();
+    }
+
+    private void HandleMovement()
+    {
+        float horizontalVelocity = input.MoveInput.x * MoveSpeed;
+        rBody.linearVelocity = new Vector2(horizontalVelocity, rBody.linearVelocity.y);
     }
 
     private void HealthBarControl()
     {
-        healthBar.value = stats.CurrentHealth;
+        healthBar.value = CurrentHealth;
         if (healthBar.value <= 0) { healthBar.image.color = Color.clear; }
         else if (healthBar.value <= 50 && healthBar.value > 0)
         {
@@ -51,37 +68,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void ApplyMovement()
+    private void HandleJump()
     {
-        float velocityX = moveInput.x * stats.MoveSpeed;
-
-        rBody.linearVelocity = new Vector2(velocityX, rBody.linearVelocity.y);
-
-        playerController.SetFloat("xVelocity", velocityX);
+        if (input.JumpTriggered && isGrounded)
+        {
+            ApplyJumpForce();
+        }
         
     }
 
-    public void TakeDamage(int damageAmount)
+    private void ApplyJumpForce()
     {
-        stats.CurrentHealth -= damageAmount;
-        Debug.Log($"Player took damage. Health left: {stats.CurrentHealth}");
+        // Reset vertical velocity to ensure consistent jump height
+        rBody.linearVelocity = new Vector2(rBody.linearVelocity.x, 0);
+
+        rBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
-
-    private bool isDead;
-    public bool IsDead
-    {
-        get { return isDead; }
-
-        set
-        {
-            if (stats.CurrentHealth <= 0)
-            {
-                isDead = true;
-            }
-            else { isDead = false; }
-        }
-    }
-
-    
-
 }
