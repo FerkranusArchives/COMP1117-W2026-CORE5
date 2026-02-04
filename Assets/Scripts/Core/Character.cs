@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
-public class Character : MonoBehaviour
+public abstract class Character : MonoBehaviour
 {
     [Header("Character Stats")]
     // Private variables
@@ -11,7 +11,7 @@ public class Character : MonoBehaviour
 
     private int currentHealth;
 
-    private bool isDead = false;
+    protected bool isDead = false;
     protected Animator anim;
 
     // Public properties
@@ -54,9 +54,5 @@ public class Character : MonoBehaviour
         }
     }
 
-    protected void Die()
-    {
-        isDead = true;
-        Debug.Log($"{gameObject.name} has died!");
-    }
+    public abstract void Die();
 }

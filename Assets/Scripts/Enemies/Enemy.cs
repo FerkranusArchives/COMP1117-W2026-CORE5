@@ -31,4 +31,9 @@ public class Enemy : Character
             transform.localScale = new Vector3(-1, 1, 1);
         }
     }
+
+    public override void Die()
+    {
+        Debug.Log("Enemy is dead!");
+    }
 }
